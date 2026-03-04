@@ -1,0 +1,9 @@
+make sure that anything that have nothing to do with our project wi do it inside the server
+
+to set a variables development to the project :
+    NODE_ENV=development nodemon server.js
+console.log(process.env)
+// console.log(process.env.NODE_ENV); ==> this is mean we are on the development env
+
+so this process we should do it on a file called config.env the we have to connect it with our node application
+se wi use an NPM package called .env ==> npm i dotenv
