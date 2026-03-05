@@ -2,6 +2,27 @@ const express = require('express');
 
 const app = express();
 
+// exports.checkID = (req, res, next, val) => {
+//   const id = req.params.id * 1
+//   if (id > getAllTours.length) {
+//     return res.status(404).json({
+//       status: 'fail',
+//       message:'invalid Id'
+//     })
+//   }
+//   next();
+// }
+
+// exports.checkBody = (req,res,next)=>{
+//   if (!req.body.name || !req.body.price) {
+//     return res.status(404).json({
+//       status:'fail',
+//       message:'invalid inputs'
+//     })
+//   }
+//   next()
+// }
+
 // ------------ MIDDLEWARE -------------
 console.log(process.env.NODE_ENV);
 const morgan = require('morgan');
