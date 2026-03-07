@@ -61,37 +61,41 @@ exports.createTour = async (req, res) => {
     console.log(err);
     res.status(400).json({
       status: "fail",
-      message: 'ERROR'
+      message: err
     })
   }
 }
 
 // --------- delete a tour -----------
-exports.deleteTour = (req, res) => {
-  // if (req.params.id * 1 > tours.length) {
-  //   return res.status(404).json({
-  //     status: 'fail',
-  //     message: 'ID invalid'
-  //   })
-  // }
-  // 204 means no content
-  //in delete we don't sent any data we jus sent null and that mean the data no longer exist
-  res.status(204).json({
-    status: 'success',
-    data: null
-  })
-};
+exports.deleteTour = async (req, res) => {
+  try {
+    await Tour.findOneAndDelete(req.params.id);
+    res.status(200).json({
+      status: 'success',
+      message: 'the tour has been deleted',
+    })
+  } catch (err) {
+    res.status(204).json({
+      status: 'fail',
+      message: err
+    })
+  }
+}
+// 204 means no content
+//in delete we don't sent any data we jus sent null and that mean the data no longer exist
+
 
 // -------- update tour ----------
 exports.updateTour = async (req, res) => {
   try {
     const tour = await Tour.findByIdAndUpdate(req.params.id, req.body, {
-      new: true
+      new: true,
+      runValidators: true
     })
     res.status(200).json({
       status: "success",
       data: {
-        tour: '<updated tour here ...>'
+        tour
       }
     })
   } catch (err) {
@@ -101,5 +105,3 @@ exports.updateTour = async (req, res) => {
     })
   }
 }
-
-
