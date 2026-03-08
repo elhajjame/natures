@@ -1,6 +1,6 @@
 const express = require('express');
-
 const app = express();
+app.set('query parser', 'extended');
 
 // exports.checkID = (req, res, next, val) => {
 //   const id = req.params.id * 1

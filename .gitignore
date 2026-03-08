@@ -1,5 +1,4 @@
-dev-data/
 node_modules/
 *.js.map
-starter/public/js/bundle.js
 config.env
+.env

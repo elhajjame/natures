@@ -8,11 +8,35 @@ const Tour = require('./../models/tourModel')
 exports.getAllTours = async (req, res) => {
   try {
     // built ths query
+    //1A) filtering:
     const queryObj = { ...req.query };
+
     const excludedFields = ['page', 'sort', 'limit', 'fields'];
     excludedFields.forEach(el => delete queryObj[el]);
     // console.log(req.query, queryObj);
-    const query = await Tour.find(queryObj);
+    console.log(req.query);
+    //1B) advanced filtering
+    let queryStr = JSON.stringify(queryObj);
+    // here to replace our object with the object that comes from the query which mean the mongodb operators
+    // we did it with regular expression \b mens we only wanna match the exact operations that we want and G for to happen that multiple times 
+    // without the g it will match just the first one
+    queryStr = queryStr.replace(/\b(gte|gt|lte|lt)\b/g, match => `$${match}`);
+    // console.log(JSON.parse(queryStr));
+    let query = Tour.find(JSON.parse(queryStr));
+
+    //2) Sorting:
+    if (req.query.sort) {
+      const sortBy = req.query.sort.split(',').join(' ');
+      console.log(sortBy);
+      query = query.sort(sortBy)
+    } else query.sort('-createdAt')
+
+    // 3) fields limiting:
+
+    //EXECUTE THE QUERY
+    const tours = await query
+
+
     // find method is going to return a query
     // const query = await Tour
     //   .find()
@@ -21,8 +45,7 @@ exports.getAllTours = async (req, res) => {
     //   .where('duration')
     //   .equals(5)
 
-    //EXECUTE THE QUERY
-    const tours = await query
+
     //SEND RESPONSE
     res.status(200).json({
       status: "success",
