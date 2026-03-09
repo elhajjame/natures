@@ -7,3 +7,15 @@ console.log(process.env)
 
 so this process we should do it on a file called config.env the we have to connect it with our node application
 se wi use an NPM package called .env ==> npm i dotenv
+
+
+
+------------------- data validation built-in validators -------------------
+type :
+** built-in validator:  These are basic validators provided by Mongoose out of the box, such as required, min, max, enum, and match.
+** Custom Validators: You can create your validation logic for more complex requirements.
+and Custom validator is a function return true or false
+
+laybiry npm i validator
+
+------------------------

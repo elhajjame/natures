@@ -35,8 +35,6 @@ exports.getAllTours = async (req, res) => {
 
     //EXECUTE THE QUERY
     const tours = await query
-
-
     // find method is going to return a query
     // const query = await Tour
     //   .find()
