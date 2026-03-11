@@ -44,8 +44,10 @@ const userSchema = new mongoose.Schema({
 });
 
 userSchema.pre('save', async function (next) {
+  //if the password has not been modified, return don't run this function and move to the next middleware
   if (!this.isModified('password')) return next();
-
+  // the current password + the cost which is 12
+  // and its generate the salt random string
   this.password = await bcrypt.hash(this.password, 12)
 
   this.passwordConfirm = undefined

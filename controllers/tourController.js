@@ -1,5 +1,6 @@
 const fs = require('fs');
-const Tour = require('./../models/tourModel')
+const Tour = require('./../models/tourModel');
+const { match } = require('assert');
 
 // const tours = JSON.parse(
 //   fs.readFileSync(`${__dirname}/../dev-data/data/tours-simple.json`)
@@ -136,6 +137,30 @@ exports.updateTour = async (req, res) => {
         tour
       }
     })
+  } catch (err) {
+    res.status(400).json({
+      status: "fail",
+      message: err
+    })
+  }
+}
+
+exports.getTourStats = async (req, res) => {
+  try {
+    const stats = Tour.aggregate([
+      //each element in the array is a stage
+      {
+        //to select/felter doc
+        $match: {
+          ratingAverage: { $gte: 4.5 }
+        },
+        //its allow you to group data
+        $group: {
+          _id: null,
+
+        }
+      }
+    ])
   } catch (err) {
     res.status(400).json({
       status: "fail",
