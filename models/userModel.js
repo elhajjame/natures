@@ -27,7 +27,8 @@ const userSchema = new mongoose.Schema({
   password: {
     type: String,
     required: [true, 'please provide a password'],
-    minlength: [6, 'the password must be more than 6 characters']
+    minlength: [6, 'the password must be more than 6 characters'],
+    select: false
   },
 
   passwordConfirm: {
@@ -51,7 +52,15 @@ userSchema.pre('save', async function (next) {
   this.password = await bcrypt.hash(this.password, 12)
 
   this.passwordConfirm = undefined
-})
+});
 
+// instance method: is a method is gonna be available on all documents on a cretan collection
+userSchema.methods.correctPassword = async function (
+  //the pass that user provide
+  candidatePassword,
+  userPassword
+) {
+  return await bcrypt.compare(candidatePassword, userPassword)
+}
 const User = mongoose.model('User', userSchema);
 module.exports = User;
