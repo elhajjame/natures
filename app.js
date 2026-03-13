@@ -2,6 +2,7 @@ const express = require('express');
 const appError = require('./utils/appError')
 const app = express();
 app.set('query parser', 'extended');
+app.use(express.json());
 
 // exports.checkID = (req, res, next, val) => {
 //   const id = req.params.id * 1
@@ -33,7 +34,11 @@ if (process.env.NODE_ENV === 'development') {
   app.use(morgan('tiny'))
 }
 
-app.use(express.json());
+app.use((req, res, next) => {
+  req.requestTime = new Date().toISOString;
+  // console.log(req.headers);
+  next();
+});
 // in this case we used it :
 // eads raw request body
 // Parses JSON

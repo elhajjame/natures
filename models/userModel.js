@@ -2,9 +2,6 @@ const mongoose = require('mongoose');
 const validator = require('validator')
 const bcrypt = require('bcryptjs');
 
-
-
-
 const userSchema = new mongoose.Schema({
   name: {
     type: String,
@@ -41,7 +38,9 @@ const userSchema = new mongoose.Schema({
       },
       message: 'passwords are not the same!'
     }
-  }
+  },
+
+  passwordChangedAt: Date
 });
 
 userSchema.pre('save', async function (next) {
@@ -60,7 +59,18 @@ userSchema.methods.correctPassword = async function (
   candidatePassword,
   userPassword
 ) {
-  return await bcrypt.compare(candidatePassword, userPassword)
+  return await bcrypt.compare(candidatePassword, userPassword);
 }
+
+// check if the user changed his password
+//JWTTimestamp: when the last time the password changed
+userSchema.methods.changedPassword = function (JWTTimestamp) {
+  if (this.passwordChangedAt) {
+    console.log(this.passwordChangedAt, JWTTimestamp);
+  }
+  // means by default the user has not changed his password
+  return false
+}
+
 const User = mongoose.model('User', userSchema);
 module.exports = User;
