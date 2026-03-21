@@ -5,7 +5,7 @@ const { match } = require('assert');
 // const tours = JSON.parse(
 //   fs.readFileSync(`${__dirname}/../dev-data/data/tours-simple.json`)
 // );
-
+// 69ba925254cc3361d25c1e8c
 exports.getAllTours = async (req, res) => {
   try {
     // built ths query
@@ -108,13 +108,13 @@ exports.createTour = async (req, res) => {
 // --------- delete a tour -----------
 exports.deleteTour = async (req, res) => {
   try {
-    await Tour.findOneAndDelete(req.params.id);
+    await Tour.findByIdAndDelete(req.params.id);
     res.status(200).json({
       status: 'success',
       message: 'the tour has been deleted',
     })
   } catch (err) {
-    res.status(204).json({
+    res.status(500).json({
       status: 'fail',
       message: err
     })

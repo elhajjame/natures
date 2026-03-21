@@ -11,7 +11,7 @@ const userSchema = new mongoose.Schema({
 
   email: {
     type: String,
-    unique: [true, ''],
+    unique: [true, 'the email must be unique'],
     required: [true, 'please provide your email'],
     isLowercase: true, // for conversion
     validate: [validator.isEmail, 'please enter a valid email']
@@ -19,6 +19,12 @@ const userSchema = new mongoose.Schema({
 
   photo: {
     type: String,
+  },
+
+  role: {
+    type: String,
+    enum: ['user', 'guide', 'lead-guide', 'admin'],
+    default: 'user'
   },
 
   password: {

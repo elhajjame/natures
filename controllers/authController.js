@@ -1,7 +1,6 @@
 const jwt = require('jsonwebtoken')
 const User = require('./../models/userModel');
 const appError = require('./../utils/appError');
-const { promisify } = require('util')
 const signToken = function (id) {
   return jwt.sign({ id }, process.env.JWT_SECRET, {
     expiresIn: process.env.JWT_EXPIRED_IN
@@ -14,6 +13,7 @@ exports.signup = async (req, res, next) => {
     const newUser = await User.create({
       name: req.body.name,
       email: req.body.email,
+      role: req.body.role,
       password: req.body.password,
       passwordConfirm: req.body.passwordConfirm
     });
@@ -112,6 +112,24 @@ exports.protect = async (req, res, next) => {
     })
   }
   // 4) check if user changed password  after the token was issued
-  freshUser.changedPassword(decoded.iat)
+  // freshUser.changedPassword(decoded.iat)
+
+  req.user = freshUser;
   next();
+}
+
+//this is a wrap function we use it cuz we cant pass an argument to a middleware function
+exports.restrictTo = (...roles) => {
+  //roles['admin', 'lead-guide'] . role = user (the argument is an array)
+  return (req, res, next) => {
+    console.log('protect rout function running');
+    console.log(req.user.role);
+    if (!roles.includes(req.user.role)) {
+      return res.status(403).json({
+        status: 'fail',
+        message: 'you do not have the permission for this action'
+      });
+    }
+    next();
+  }
 }
